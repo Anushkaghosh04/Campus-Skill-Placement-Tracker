@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Skills - Placement Tracker{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="fa-solid fa-screwdriver-wrench me-2 text-primary"></i>My Skills</h3>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="pt-card">
+            <div class="pt-card-title">Add New Skill</div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Skill Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Proficiency</label>
+                    {{ form.proficiency }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fa-solid fa-plus me-1"></i>Add Skill
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="pt-card">
+            <div class="pt-card-title">Your Skills ({{ skills|length }})</div>
+            {% if skills %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Skill</th>
+                            <th>Category</th>
+                            <th>Proficiency</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for skill in skills %}
+                        <tr>
+                            <td class="fw-semibold">{{ skill.name }}</td>
+                            <td><span class="skill-pill matched">{{ skill.get_category_display }}</span></td>
+                            <td>{{ skill.get_proficiency_display }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'skill_edit' skill.pk %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="{% url 'skill_delete' skill.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="text-muted mb-0">You haven't added any skills yet. Add your first skill using the form on the left.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Resume Upload - Placement Tracker{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="fa-solid fa-file-arrow-up me-2 text-primary"></i>Resume Upload & Analyzer</h3>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="pt-card">
+            <div class="pt-card-title">Upload Resume (PDF)</div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.file }}
+                {% if form.file.errors %}<div class="text-danger small mt-1">{{ form.file.errors|striptags }}</div>{% endif %}
+                <button type="submit" class="btn btn-primary w-100 mt-3">
+                    <i class="fa-solid fa-upload me-1"></i>Upload & Analyze
+                </button>
+            </form>
+            {% if resume %}
+                <p class="small text-muted mt-3 mb-0">
+                    Uploaded: {{ resume.uploaded_at|date:"M d, Y H:i" }}<br>
+                    <a href="{{ resume.file.url }}" target="_blank">View current resume</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        {% if resume %}
+        <div class="pt-card">
+            <div class="pt-card-title">Keyword Match Analysis</div>
+            {% if resume.matched_keywords_list %}
+                <p class="small text-muted mb-2">Skills/keywords found in your resume:</p>
+                {% for kw in resume.matched_keywords_list %}
+                    <span class="skill-pill matched">{{ kw }}</span>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No recognizable technical keywords were found in your resume text. Try adding a clear "Skills" section.</p>
+            {% endif %}
+        </div>
+
+        <div class="pt-card">
+            <div class="pt-card-title">Suggested Missing Skills</div>
+            {% if missing_skills %}
+                <p class="small text-muted mb-2">Based on your target role, consider adding these to your resume:</p>
+                {% for skill in missing_skills %}
+                    <span class="skill-pill missing">{{ skill }}</span>
+                {% endfor %}
+            {% elif missing_skills == None %}
+                <p class="text-muted">Set a target role in the <a href="{% url 'skill_gap' %}">Skill Gap Analyzer</a> to get tailored suggestions.</p>
+            {% else %}
+                <p class="text-success mb-0"><i class="fa-solid fa-circle-check me-1"></i>Your resume covers all key skills for your target role!</p>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="pt-card text-center text-muted py-5">
+            <i class="fa-solid fa-file-pdf fa-3x mb-3"></i>
+            <p>Upload your resume as a PDF to get an automatic keyword analysis and skill suggestions.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

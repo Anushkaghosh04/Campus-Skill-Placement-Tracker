@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Quiz - Placement Tracker{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="fa-solid fa-circle-question me-2 text-primary"></i>Mock Test / Quiz</h3>
+
+{% if questions %}
+<form method="post">
+    {% csrf_token %}
+    {% for q in questions %}
+    <div class="pt-card">
+        <p class="fw-semibold mb-3">{{ forloop.counter }}. {{ q.question_text }}
+            <span class="badge bg-secondary ms-1">{{ q.get_category_display }}</span>
+        </p>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="A" id="q{{ q.id }}_a" required>
+            <label class="form-check-label" for="q{{ q.id }}_a">{{ q.option_a }}</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="B" id="q{{ q.id }}_b">
+            <label class="form-check-label" for="q{{ q.id }}_b">{{ q.option_b }}</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="C" id="q{{ q.id }}_c">
+            <label class="form-check-label" for="q{{ q.id }}_c">{{ q.option_c }}</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="D" id="q{{ q.id }}_d">
+            <label class="form-check-label" for="q{{ q.id }}_d">{{ q.option_d }}</label>
+        </div>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary px-4">
+        <i class="fa-solid fa-paper-plane me-1"></i>Submit Quiz
+    </button>
+</form>
+{% else %}
+<div class="pt-card text-center text-muted py-5">
+    <i class="fa-solid fa-circle-question fa-3x mb-3"></i>
+    <p>No quiz questions are available yet. Please check back later, or ask your administrator to add questions via the admin panel.</p>
+</div>
+{% endif %}
+
+<div class="mt-3">
+    <a href="{% url 'quiz_result' %}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-clock-rotate-left me-1"></i>View Past Results
+    </a>
+</div>
+{% endblock %}

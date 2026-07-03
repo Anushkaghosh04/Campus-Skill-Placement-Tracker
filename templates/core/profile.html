@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Profile - Placement Tracker{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="fa-solid fa-id-card me-2 text-primary"></i>My Profile</h3>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="pt-card text-center">
+            {% if profile.profile_photo %}
+                <img src="{{ profile.profile_photo.url }}" class="rounded-circle mb-3" width="120" height="120" style="object-fit:cover;">
+            {% else %}
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width:120px;height:120px;font-size:2.5rem;">
+                    {{ profile.display_name|slice:":1"|upper }}
+                </div>
+            {% endif %}
+            <h5 class="mb-0">{{ profile.display_name }}</h5>
+            <p class="text-muted small mb-2">{{ profile.user.username }}</p>
+            <p class="mb-1"><i class="fa-solid fa-envelope me-2 text-muted"></i>{{ profile.email|default:"Not set" }}</p>
+            <p class="mb-1"><i class="fa-solid fa-building-columns me-2 text-muted"></i>{{ profile.get_branch_display }}</p>
+            <p class="mb-0"><i class="fa-solid fa-calendar me-2 text-muted"></i>Semester {{ profile.semester }}</p>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="pt-card">
+            <div class="pt-card-title">Edit Profile Details</div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Branch</label>
+                        {{ form.branch }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Semester</label>
+                        {{ form.semester }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">CGPA</label>
+                        {{ form.cgpa }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Projects Completed</label>
+                        {{ form.projects_count }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Target Role</label>
+                        {{ form.target_role }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Profile Photo</label>
+                        <input type="file" name="profile_photo" accept="image/*" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4 px-4">
+                    <i class="fa-solid fa-floppy-disk me-1"></i>Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

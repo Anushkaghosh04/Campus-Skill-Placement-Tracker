@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Placement Tracker{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Welcome back, {{ profile.display_name }} 👋</h3>
+        <p class="text-muted mb-0">Here's your placement readiness overview</p>
+    </div>
+    <span class="badge fs-6 px-3 py-2 bg-{{ badge_color|default:'secondary' }}">
+        <i class="fa-solid fa-award me-1"></i>{{ badge_label }}
+    </span>
+</div>
+
+<!-- Stat cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card bg-grad-1">
+            <i class="fa-solid fa-gauge-high bg-icon"></i>
+            <div class="stat-value">{{ score_data.total }}/100</div>
+            <div class="stat-label">Readiness Score</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card bg-grad-2">
+            <i class="fa-solid fa-screwdriver-wrench bg-icon"></i>
+            <div class="stat-value">{{ total_skills }}</div>
+            <div class="stat-label">Skills Added</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card bg-grad-3">
+            <i class="fa-solid fa-diagram-project bg-icon"></i>
+            <div class="stat-value">{{ profile.projects_count }}</div>
+            <div class="stat-label">Projects Completed</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card bg-grad-4">
+            <i class="fa-solid fa-file-pdf bg-icon"></i>
+            <div class="stat-value">{% if has_resume %}Uploaded{% else %}Pending{% endif %}</div>
+            <div class="stat-label">Resume Status</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Readiness score breakdown -->
+    <div class="col-lg-7">
+        <div class="pt-card">
+            <div class="pt-card-title"><i class="fa-solid fa-chart-pie me-2 text-primary"></i>Placement Readiness Score</div>
+
+            <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">Overall Score</span>
+                <span class="fw-semibold">{{ score_data.total }}%</span>
+            </div>
+            <div class="progress mb-3" style="height: 1.1rem;">
+                <div class="progress-bar bg-{{ badge_color }}" style="width: {{ score_data.total }}%;"></div>
+            </div>
+            <hr>
+            <p class="text-muted small mb-3">Score breakdown by contributing factor:</p>
+
+            <div class="mb-2">
+                <div class="d-flex justify-content-between small mb-1">
+                    <span>Skills ({{ score_data.skills_count }} added) — 40% weight</span>
+                    <span>{{ score_data.skills_score }} / 40</span>
+                </div>
+                <div class="progress" style="height: 0.6rem;">
+                    <div class="progress-bar bg-primary" style="width: {{ score_data.skills_score|floatformat:0 }}%; max-width:100%;"></div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="d-flex justify-content-between small mb-1">
+                    <span>Projects ({{ score_data.projects_count }} completed) — 30% weight</span>
+                    <span>{{ score_data.projects_score }} / 30</span>
+                </div>
+                <div class="progress" style="height: 0.6rem;">
+                    <div class="progress-bar bg-info" style="width: {{ score_data.projects_score|floatformat:0 }}%; max-width:100%;"></div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="d-flex justify-content-between small mb-1">
+                    <span>Resume Uploaded — 20% weight</span>
+                    <span>{{ score_data.resume_score }} / 20</span>
+                </div>
+                <div class="progress" style="height: 0.6rem;">
+                    <div class="progress-bar bg-success" style="width: {{ score_data.resume_score|floatformat:0 }}%; max-width:100%;"></div>
+                </div>
+            </div>
+            <div class="mb-1">
+                <div class="d-flex justify-content-between small mb-1">
+                    <span>Quiz Average ({{ score_data.avg_quiz_percentage }}%) — 10% weight</span>
+                    <span>{{ score_data.quiz_score }} / 10</span>
+                </div>
+                <div class="progress" style="height: 0.6rem;">
+                    <div class="progress-bar bg-warning" style="width: {{ score_data.quiz_score|floatformat:0 }}%; max-width:100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skill gap summary -->
+        <div class="pt-card">
+            <div class="pt-card-title"><i class="fa-solid fa-magnifying-glass-chart me-2 text-primary"></i>Skill Gap Summary</div>
+            {% if gap_data %}
+                <p class="mb-2">Target Role: <strong>{{ gap_data.role_label }}</strong> &middot; Match: <strong>{{ gap_data.match_percentage }}%</strong></p>
+                <div class="progress mb-3" style="height: 0.7rem;">
+                    <div class="progress-bar bg-success" style="width: {{ gap_data.match_percentage }}%;"></div>
+                </div>
+                <p class="small text-muted mb-1">Missing skills for this role:</p>
+                {% if gap_data.missing %}
+                    {% for skill in gap_data.missing %}
+                        <span class="skill-pill missing">{{ skill }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-success mb-0"><i class="fa-solid fa-circle-check me-1"></i>You have all required skills for this role!</p>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{% url 'skill_gap' %}" class="btn btn-sm btn-outline-primary">View Full Analysis</a>
+                </div>
+            {% else %}
+                <p class="text-muted">You haven't selected a target role yet.</p>
+                <a href="{% url 'skill_gap' %}" class="btn btn-sm btn-primary">Select Target Role</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Right column: recommendation + activity -->
+    <div class="col-lg-5">
+        <div class="pt-card">
+            <div class="pt-card-title"><i class="fa-solid fa-lightbulb me-2 text-warning"></i>Career Recommendation</div>
+            <h4 class="text-primary">{{ recommendation.role_label }}</h4>
+            <p class="text-muted small mb-0">{{ recommendation.reason }}</p>
+        </div>
+
+        <div class="pt-card">
+            <div class="pt-card-title"><i class="fa-solid fa-layer-group me-2 text-info"></i>Skills by Category</div>
+            {% if skills_by_category %}
+                {% for cat in skills_by_category %}
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>{{ cat.category }}</span>
+                        <span class="fw-semibold">{{ cat.count }}</span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mb-2">No skills added yet.</p>
+            {% endif %}
+            <a href="{% url 'skills' %}" class="btn btn-sm btn-outline-primary mt-2">Manage Skills</a>
+        </div>
+
+        <div class="pt-card">
+            <div class="pt-card-title"><i class="fa-solid fa-clock-rotate-left me-2 text-secondary"></i>Recent Activity</div>
+            {% if recent_activities %}
+                {% for activity in recent_activities %}
+                    <div class="activity-item">
+                        {{ activity.message }}
+                        <br><small>{{ activity.created_at|timesince }} ago</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted mb-0">No activity yet. Start by adding skills!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

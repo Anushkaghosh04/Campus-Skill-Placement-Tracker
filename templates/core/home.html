@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %} Campus Skill & Placement Readiness Tracker{% endblock %}
+
+{% block landing_content %}
+
+<section class="landing-hero">
+    <div class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6 text-white">
+                <span class="badge bg-light text-primary fw-semibold mb-3 px-3 py-2">
+                    <i class="fa-solid fa-bolt me-1"></i>For Students, By Design
+                </span>
+                <h1 class="fw-bold mb-3" style="font-size: 2.6rem;">
+                    Know exactly how placement-ready you are.
+                </h1>
+                <p class="lead mb-4" style="opacity:0.92;">
+                    Track your skills, uncover gaps for your dream role, take mock tests,
+                    and get an instant readiness score out of 100 — all in one dashboard.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg fw-semibold px-4">
+                        <i class="fa-solid fa-rocket me-2"></i>Get Started Free
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">
+                        Login
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-card-preview">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-semibold text-dark">Readiness Score</span>
+                        <span class="badge bg-success">Job Ready</span>
+                    </div>
+                    <div class="d-flex align-items-baseline mb-2">
+                        <span class="display-5 fw-bold text-primary">82</span>
+                        <span class="text-muted ms-1">/ 100</span>
+                    </div>
+                    <div class="progress mb-4" style="height: 0.8rem;">
+                        <div class="progress-bar bg-success" style="width: 82%;"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small text-muted border-top pt-3">
+                        <span><i class="fa-solid fa-screwdriver-wrench me-1"></i>9 Skills</span>
+                        <span><i class="fa-solid fa-diagram-project me-1"></i>4 Projects</span>
+                        <span><i class="fa-solid fa-file-pdf me-1"></i>Resume ✓</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Everything you need to land your first job</h2>
+        <p class="text-muted">One dashboard. Four core tools. Zero guesswork.</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <div class="feature-icon bg-grad-1"><i class="fa-solid fa-gauge-high"></i></div>
+                <h5 class="mt-3">Readiness Score</h5>
+                <p class="text-muted small mb-0">A live score out of 100 based on your skills, projects, resume, and quiz performance.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <div class="feature-icon bg-grad-2"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <h5 class="mt-3">Skill Gap Analyzer</h5>
+                <p class="text-muted small mb-0">Pick a target role and instantly see which skills you're missing to get there.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <div class="feature-icon bg-grad-3"><i class="fa-solid fa-file-pdf"></i></div>
+                <h5 class="mt-3">Resume Analyzer</h5>
+                <p class="text-muted small mb-0">Upload your resume and get keyword matches plus suggestions for what to add.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <div class="feature-icon bg-grad-4"><i class="fa-solid fa-circle-question"></i></div>
+                <h5 class="mt-3">Mock Quizzes</h5>
+                <p class="text-muted small mb-0">Test your technical knowledge and track your quiz performance over time.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-4">How it works</h2>
+            <div class="d-flex mb-4">
+                <div class="step-number">1</div>
+                <div class="ms-3">
+                    <h6 class="fw-semibold mb-1">Create your profile</h6>
+                    <p class="text-muted small mb-0">Add your branch, CGPA, and target career role.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="step-number">2</div>
+                <div class="ms-3">
+                    <h6 class="fw-semibold mb-1">Add your skills & projects</h6>
+                    <p class="text-muted small mb-0">List what you know — we'll categorize and score it.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="step-number">3</div>
+                <div class="ms-3">
+                    <h6 class="fw-semibold mb-1">Upload your resume & take a quiz</h6>
+                    <p class="text-muted small mb-0">Get keyword analysis and a knowledge check score.</p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="step-number">4</div>
+                <div class="ms-3">
+                    <h6 class="fw-semibold mb-1">Track your readiness score</h6>
+                    <p class="text-muted small mb-0">Watch your score climb as you close skill gaps.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="pt-card">
+                <p class="small text-muted mb-2">Career Recommendation Preview</p>
+                <h4 class="text-primary mb-3">Full Stack Developer</h4>
+                <p class="small text-muted mb-3">Based on your HTML, CSS, JavaScript, Python, Django, and SQL skills.</p>
+                <hr>
+                <p class="small fw-semibold mb-2">Missing for this role:</p>
+                <span class="skill-pill missing">React</span>
+                <span class="skill-pill missing">Git</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section text-center text-white py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Ready to find out your readiness score?</h2>
+        <p class="mb-4" style="opacity:0.9;">It takes less than 2 minutes to create your profile and get started.</p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg fw-semibold px-5">
+            <i class="fa-solid fa-rocket me-2"></i>Create Free Account
+        </a>
+    </div>
+</section>
+
+<footer class="text-center py-4 text-muted small">
+    &copy; {% now "Y" %}  Campus Skill & Placement Readiness Tracker.
+</footer>
+{% endblock %}
